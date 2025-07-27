@@ -1,0 +1,78 @@
+job-analyzer/                           # Root directory in htdocs
+├── app/                                # Application core
+│   ├── Controllers/                    # Request handlers
+│   │   ├── DashboardController.php
+│   │   ├── JobController.php
+│   │   ├── AnalysisController.php
+│   │   └── ReportController.php
+│   ├── Models/                         # Database models
+│   │   ├── Job.php
+│   │   ├── Analysis.php
+│   │   └── User.php
+│   ├── Services/                       # Business logic
+│   │   ├── JobAnalyzerService.php
+│   │   ├── PDFParserService.php
+│   │   ├── AIAnalysisService.php
+│   │   └── ReportGeneratorService.php
+│   ├── Middleware/                     # Request middleware
+│   │   └── AuthMiddleware.php
+│   └── Validators/                     # Form validation
+│       ├── JobValidator.php
+│       └── FileValidator.php
+├── config/                            # Configuration files
+│   ├── database.php
+│   ├── app.php
+│   └── services.php
+├── database/                          # Database related
+│   ├── migrations/                    # Database migrations
+│   │   ├── 001_create_jobs_table.sql
+│   │   ├── 002_create_analysis_table.sql
+│   │   └── 003_create_users_table.sql
+│   └── seeds/                         # Sample data
+│       └── sample_jobs.sql
+├── public/                            # Web accessible files
+│   ├── index.php                      # Entry point
+│   ├── assets/                        # Static assets
+│   │   ├── css/
+│   │   │   ├── app.css
+│   │   │   └── dashboard.css
+│   │   ├── js/
+│   │   │   ├── app.js
+│   │   │   ├── dashboard.js
+│   │   │   └── charts.js
+│   │   └── images/
+│   └── uploads/                       # Uploaded files
+│       ├── resumes/
+│       └── cover_letters/
+├── resources/                         # Views and templates
+│   └── views/                         # Twig templates
+│       ├── layouts/
+│       │   ├── app.twig
+│       │   └── dashboard.twig
+│       ├── dashboard/
+│       │   └── index.twig
+│       ├── jobs/
+│       │   ├── index.twig
+│       │   ├── create.twig
+│       │   ├── view.twig
+│       │   └── edit.twig
+│       └── reports/
+│           └── analysis.twig
+├── routes/                            # Route definitions
+│   ├── web.php
+│   └── api.php
+├── storage/                           # Application storage
+│   ├── logs/
+│   ├── cache/
+│   └── temp/
+├── python_services/                   # AI services
+│   ├── resume_analyzer.py
+│   ├── job_parser.py
+│   └── requirements.txt
+├── vendor/                            # Composer dependencies
+├── .env                               # Environment variables
+├── .env.example                       # Environment template
+├── .gitignore                         # Git ignore rules
+├── composer.json                      # Composer configuration
+├── composer.lock                      # Composer lock file
+└── README.md                          # Project documentation

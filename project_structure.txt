@@ -1,0 +1,43 @@
+Folder PATH listing
+Volume serial number is 94A9-83C6
+C:.
+³   composer dependencies list.txt
+³   database_schema.sql
+³   env_configuration.sh
+³   folder_structure.txt
+³   JobAnalyzer Pro - Complete Setup Instructions.pdf
+³   pad.txt
+³   project_structure.txt
+³   
+ÃÄÄÄapp
+³   ÃÄÄÄControllers
+³   ³       DashboardController.php
+³   ³       JobController.php
+³   ³       
+³   ÃÄÄÄModels
+³   ³       AnalysisLog.php
+³   ³       Job.php
+³   ³       JobAnalysis.php
+³   ³       User.php
+³   ³       
+³   ÃÄÄÄServices
+³   ³       AIAnalysisService.php
+³   ³       JobAnalyzerService.php
+³   ³       PDFParserService.php
+³   ³       
+³   ÀÄÄÄValidators
+³           FileValidator.php
+³           JobValidator.php
+³           
+ÃÄÄÄpublic
+³       index.php
+³       
+ÃÄÄÄresources
+³   ÀÄÄÄviews
+³       ÀÄÄÄdashboard
+³               index.html
+³               index.twig
+³               
+ÀÄÄÄroutes
+        web.php
+        
