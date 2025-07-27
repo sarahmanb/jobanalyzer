@@ -13,7 +13,7 @@ job-analyzer/                           # Root directory in htdocs
 │   │   ├── JobAnalyzerService.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Services/JobAnalyzerService.php
 │   │   ├── PDFParserService.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Services/PDFParserService.php
 │   │   ├── AIAnalysisService.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Services/AIAnalysisService.php
-│   │   └── ReportGeneratorService.php
+│   │   └── ReportGeneratorService.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Services/ReportGeneratorService.php
 │   ├── Middleware/                     # Request middleware
 │   │   └── AuthMiddleware.php
 │   └── Validators/                     # Form validation

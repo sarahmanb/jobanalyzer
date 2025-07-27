@@ -1,0 +1,14 @@
+{
+    "name": "sarahmnab/jobanalyzer",
+    "description": "An intelligent job search companion that helps you tailor your resume and cover letter as per keywords in job description.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "S A Rehman Bukhari",
+            "email": "sarahmanb@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
