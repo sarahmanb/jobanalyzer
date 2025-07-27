@@ -20,9 +20,9 @@ job-analyzer/                           # Root directory in htdocs
 │       ├── JobValidator.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Validators/JobValidator.php
 │       └── FileValidator.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Validators/FileValidator.php
 ├── config/                            # Configuration files
-│   ├── database.php
-│   ├── app.php 
-│   └── services.php
+│   ├── database.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/config/database.php
+│   ├── app.php  https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/config/app.php
+│   └── services.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/config/services.php
 ├── database/                          # Database related
 │   ├── migrations/                    # Database migrations
 │   │   ├── 001_create_jobs_table.sql
