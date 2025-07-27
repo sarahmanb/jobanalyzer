@@ -3,8 +3,8 @@ job-analyzer/                           # Root directory in htdocs
 │   ├── Controllers/                    # Request handlers
 │   │   ├── DashboardController.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Controllers/DashboardController.php
 │   │   ├── JobController.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Controllers/JobController.php
-│   │   ├── AnalysisController.php
-│   │   └── ReportController.php
+│   │   ├── AnalysisController.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Controllers/AnalysisController.php
+│   │   └── ReportController.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Controllers/ReportController.php
 │   ├── Models/                         # Database models
 │   │   ├── Job.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Models/Job.php
 │   │   ├── Analysis.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Models/JobAnalysis.php | https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Models/AnalysisLog.php
