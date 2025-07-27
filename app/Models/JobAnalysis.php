@@ -68,7 +68,7 @@ class JobAnalysis extends Model
         'cover_letter_recommendations' => 'array',
         'general_recommendations' => 'array'
     ];
-
+    
     protected $dates = [
         'created_at',
         'updated_at'
@@ -81,21 +81,51 @@ class JobAnalysis extends Model
     }
 
     // Accessors
-    public function getOverallGradeAttribute(): string
+    public function getOverallScoreColorAttribute(): string
     {
-        if ($this->overall_score >= 90) return 'A+';
-        if ($this->overall_score >= 85) return 'A';
-        if ($this->overall_score >= 80) return 'A-';
-        if ($this->overall_score >= 75) return 'B+';
-        if ($this->overall_score >= 70) return 'B';
-        if ($this->overall_score >= 65) return 'B-';
-        if ($this->overall_score >= 60) return 'C+';
-        if ($this->overall_score >= 55) return 'C';
-        if ($this->overall_score >= 50) return 'C-';
-        return 'D';
+        $score = $this->overall_score;
+        if ($score >= 85) return 'success';
+        if ($score >= 70) return 'primary';
+        if ($score >= 55) return 'warning';
+        return 'danger';
     }
 
-    public function getRecommendationBadgeColorAttribute(): string
+    public function getATSScoreColorAttribute(): string
+    {
+        $score = $this->ats_score;
+        if ($score >= 80) return 'success';
+        if ($score >= 60) return 'warning';
+        return 'danger';
+    }
+
+    public function getInterviewProbabilityColorAttribute(): string
+    {
+        $probability = $this->interview_probability;
+        if ($probability >= 70) return 'success';
+        if ($probability >= 50) return 'primary';
+        if ($probability >= 30) return 'warning';
+        return 'danger';
+    }
+
+    public function getRecommendationTextAttribute(): string
+    {
+        switch ($this->ai_recommendation) {
+            case 'excellent_match':
+                return 'Excellent Match - Apply immediately!';
+            case 'good_match':
+                return 'Good Match - Strong candidate';
+            case 'fair_match':
+                return 'Fair Match - Consider improvements';
+            case 'poor_match':
+                return 'Poor Match - Significant gaps';
+            case 'not_recommended':
+                return 'Not Recommended - Major misalignment';
+            default:
+                return 'Analysis Complete';
+        }
+    }
+
+    public function getRecommendationColorAttribute(): string
     {
         switch ($this->ai_recommendation) {
             case 'excellent_match':
@@ -103,255 +133,250 @@ class JobAnalysis extends Model
             case 'good_match':
                 return 'primary';
             case 'fair_match':
-                return 'warning';
+                return 'info';
             case 'poor_match':
-                return 'danger';
+                return 'warning';
             case 'not_recommended':
-                return 'dark';
+                return 'danger';
             default:
                 return 'secondary';
         }
     }
 
-    public function getRecommendationTextAttribute(): string
+    public function getKeywordMatchPercentageAttribute(): float
     {
-        switch ($this->ai_recommendation) {
-            case 'excellent_match':
-                return 'Excellent Match - Apply Immediately';
-            case 'good_match':
-                return 'Good Match - Strong Candidate';
-            case 'fair_match':
-                return 'Fair Match - Consider After Improvements';
-            case 'poor_match':
-                return 'Poor Match - Significant Gaps';
-            case 'not_recommended':
-                return 'Not Recommended - Major Misalignment';
-            default:
-                return 'Analysis Pending';
-        }
+        $matching = count($this->matching_keywords ?? []);
+        $missing = count($this->missing_keywords ?? []);
+        $total = $matching + $missing;
+        
+        return $total > 0 ? round(($matching / $total) * 100, 1) : 0;
+    }
+
+    public function getTotalKeywordsAttribute(): int
+    {
+        return count($this->matching_keywords ?? []) + count($this->missing_keywords ?? []);
+    }
+
+    public function getMatchingKeywordsCountAttribute(): int
+    {
+        return count($this->matching_keywords ?? []);
+    }
+
+    public function getMissingKeywordsCountAttribute(): int
+    {
+        return count($this->missing_keywords ?? []);
     }
 
     public function getSectionScoresAttribute(): array
     {
         return [
-            'Contact Info' => $this->contact_info_score,
-            'Summary' => $this->summary_score,
-            'Experience' => $this->experience_score,
-            'Education' => $this->education_score,
-            'Skills' => $this->skills_score,
-            'Achievements' => $this->achievements_score
+            'contact_info' => $this->contact_info_score,
+            'summary' => $this->summary_score,
+            'experience' => $this->experience_score,
+            'education' => $this->education_score,
+            'skills' => $this->skills_score,
+            'achievements' => $this->achievements_score
         ];
     }
 
-    public function getSpiderChartDataAttribute(): array
+    public function getAverageSectionScoreAttribute(): float
     {
-        return [
-            'labels' => ['Contact', 'Summary', 'Experience', 'Education', 'Skills', 'Achievements'],
-            'data' => [
-                $this->contact_info_score,
-                $this->summary_score,
-                $this->experience_score,
-                $this->education_score,
-                $this->skills_score,
-                $this->achievements_score
-            ]
-        ];
+        $scores = $this->section_scores;
+        return count($scores) > 0 ? round(array_sum($scores) / count($scores), 1) : 0;
     }
 
-    public function getKeywordAnalysisSummaryAttribute(): array
+    public function getWeakestSectionAttribute(): string
     {
-        $matching = is_array($this->matching_keywords) ? count($this->matching_keywords) : 0;
-        $missing = is_array($this->missing_keywords) ? count($this->missing_keywords) : 0;
-        $suggested = is_array($this->suggested_keywords) ? count($this->suggested_keywords) : 0;
-
-        return [
-            'matching_count' => $matching,
-            'missing_count' => $missing,
-            'suggested_count' => $suggested,
-            'total_analyzed' => $matching + $missing,
-            'match_percentage' => $matching + $missing > 0 ? round(($matching / ($matching + $missing)) * 100, 1) : 0
-        ];
+        $scores = $this->section_scores;
+        $minScore = min($scores);
+        return array_search($minScore, $scores);
     }
 
-    public function getInterviewOddsTextAttribute(): string
+    public function getStrongestSectionAttribute(): string
     {
-        $probability = $this->interview_probability;
-        
-        if ($probability >= 80) return 'Very High';
-        if ($probability >= 60) return 'High';
-        if ($probability >= 40) return 'Moderate';
-        if ($probability >= 20) return 'Low';
-        return 'Very Low';
+        $scores = $this->section_scores;
+        $maxScore = max($scores);
+        return array_search($maxScore, $scores);
     }
 
-    public function getJobOddsTextAttribute(): string
+    public function getAllRecommendationsAttribute(): array
     {
-        $probability = $this->job_securing_probability;
-        
-        if ($probability >= 80) return 'Excellent';
-        if ($probability >= 60) return 'Good';
-        if ($probability >= 40) return 'Fair';
-        if ($probability >= 20) return 'Poor';
-        return 'Very Poor';
-    }
-
-    public function getConfidenceLevelTextAttribute(): string
-    {
-        $confidence = $this->ai_confidence_level;
-        
-        if ($confidence >= 90) return 'Very High Confidence';
-        if ($confidence >= 75) return 'High Confidence';
-        if ($confidence >= 60) return 'Moderate Confidence';
-        if ($confidence >= 40) return 'Low Confidence';
-        return 'Very Low Confidence';
-    }
-
-    // Helper Methods
-    public function getAllRecommendations(): array
-    {
-        $recommendations = [];
+        $all = [];
         
         if (is_array($this->resume_recommendations)) {
             foreach ($this->resume_recommendations as $rec) {
-                $recommendations[] = ['type' => 'resume', 'text' => $rec];
+                $all[] = ['type' => 'resume', 'text' => $rec];
             }
         }
         
         if (is_array($this->cover_letter_recommendations)) {
             foreach ($this->cover_letter_recommendations as $rec) {
-                $recommendations[] = ['type' => 'cover_letter', 'text' => $rec];
+                $all[] = ['type' => 'cover_letter', 'text' => $rec];
             }
         }
         
         if (is_array($this->general_recommendations)) {
             foreach ($this->general_recommendations as $rec) {
-                $recommendations[] = ['type' => 'general', 'text' => $rec];
+                $all[] = ['type' => 'general', 'text' => $rec];
             }
         }
         
-        return $recommendations;
+        return $all;
     }
 
-    public function getTopMatchingKeywords(int $limit = 10): array
+    public function getPriorityRecommendationsAttribute(): array
     {
-        if (!is_array($this->matching_keywords)) {
-            return [];
+        $recommendations = [];
+        
+        // High priority: Low ATS score
+        if ($this->ats_score < 60) {
+            $recommendations[] = [
+                'priority' => 'high',
+                'type' => 'ats',
+                'text' => 'Critical: Improve ATS compatibility to increase visibility'
+            ];
         }
         
-        return array_slice($this->matching_keywords, 0, $limit);
-    }
-
-    public function getTopMissingKeywords(int $limit = 10): array
-    {
-        if (!is_array($this->missing_keywords)) {
-            return [];
+        // High priority: Low interview probability
+        if ($this->interview_probability < 40) {
+            $recommendations[] = [
+                'priority' => 'high',
+                'type' => 'interview',
+                'text' => 'Focus on improving resume-job match to boost interview chances'
+            ];
         }
         
-        return array_slice($this->missing_keywords, 0, $limit);
-    }
-
-    public function getTopSuggestedKeywords(int $limit = 10): array
-    {
-        if (!is_array($this->suggested_keywords)) {
-            return [];
+        // Medium priority: Missing keywords
+        if (count($this->missing_keywords ?? []) > 5) {
+            $recommendations[] = [
+                'priority' => 'medium',
+                'type' => 'keywords',
+                'text' => 'Add more relevant keywords from job description'
+            ];
         }
         
-        return array_slice($this->suggested_keywords, 0, $limit);
-    }
-
-    public function getScoreColor(float $score): string
-    {
-        if ($score >= 80) return 'success';
-        if ($score >= 60) return 'primary';
-        if ($score >= 40) return 'warning';
-        return 'danger';
-    }
-
-    public function getAnalysisQuality(): string
-    {
-        $avgScore = ($this->overall_score + $this->ats_score + $this->resume_match_score) / 3;
+        // Low priority: Section improvements
+        $weakestSection = $this->weakest_section;
+        if ($this->section_scores[$weakestSection] < 70) {
+            $recommendations[] = [
+                'priority' => 'low',
+                'type' => 'section',
+                'text' => 'Strengthen your ' . str_replace('_', ' ', $weakestSection) . ' section'
+            ];
+        }
         
-        if ($avgScore >= 85) return 'excellent';
-        if ($avgScore >= 70) return 'good';
-        if ($avgScore >= 55) return 'fair';
-        return 'poor';
+        return array_slice($recommendations, 0, 5);
     }
 
-    public function hasComprehensiveAnalysis(): bool
+    // Helper Methods
+    public function isExcellentMatch(): bool
     {
-        return !empty($this->matching_keywords) && 
-               !empty($this->skill_match_analysis) && 
-               $this->analysis_type === 'ai_enhanced';
+        return $this->overall_score >= 85 && $this->ats_score >= 80;
     }
 
-    public function getSkillGaps(): array
+    public function isGoodMatch(): bool
     {
-        if (!is_array($this->experience_gap_analysis)) {
-            return [];
+        return $this->overall_score >= 70 && $this->ats_score >= 60;
+    }
+
+    public function needsImprovement(): bool
+    {
+        return $this->overall_score < 60 || $this->ats_score < 50;
+    }
+
+    public function hasHighInterviewChance(): bool
+    {
+        return $this->interview_probability >= 70;
+    }
+
+    public function getSpiderChartData(): array
+    {
+        return [
+            'labels' => ['ATS Score', 'Resume Match', 'Cover Letter', 'Experience', 'Education', 'Skills'],
+            'data' => [
+                $this->ats_score,
+                $this->resume_match_score,
+                $this->cover_letter_match_score,
+                $this->experience_score,
+                $this->education_score,
+                $this->skills_score
+            ]
+        ];
+    }
+
+    public function getImprovementPlan(): array
+    {
+        $plan = [];
+        
+        // Step 1: Fix critical ATS issues
+        if ($this->ats_score < 60) {
+            $plan[] = [
+                'step' => 1,
+                'title' => 'Fix ATS Compatibility Issues',
+                'description' => 'Address formatting and parsing issues that prevent ATS from reading your resume',
+                'impact' => 'high',
+                'effort' => 'medium'
+            ];
         }
-
-        return $this->experience_gap_analysis['skill_gaps'] ?? [];
-    }
-
-    public function getExperienceGaps(): array
-    {
-        if (!is_array($this->experience_gap_analysis)) {
-            return [];
+        
+        // Step 2: Add missing keywords
+        if (count($this->missing_keywords ?? []) > 3) {
+            $plan[] = [
+                'step' => 2,
+                'title' => 'Add Missing Keywords',
+                'description' => 'Include relevant keywords from job description: ' . implode(', ', array_slice($this->missing_keywords ?? [], 0, 5)),
+                'impact' => 'high',
+                'effort' => 'low'
+            ];
         }
-
-        return $this->experience_gap_analysis['experience_gaps'] ?? [];
-    }
-
-    public function getEducationGaps(): array
-    {
-        if (!is_array($this->education_match_analysis)) {
-            return [];
+        
+        // Step 3: Improve weakest section
+        $weakest = $this->weakest_section;
+        if ($this->section_scores[$weakest] < 70) {
+            $plan[] = [
+                'step' => 3,
+                'title' => 'Strengthen ' . ucwords(str_replace('_', ' ', $weakest)) . ' Section',
+                'description' => 'This section scored only ' . $this->section_scores[$weakest] . '% and needs improvement',
+                'impact' => 'medium',
+                'effort' => 'medium'
+            ];
         }
-
-        return $this->education_match_analysis['education_gaps'] ?? [];
+        
+        return $plan;
     }
 
     // Static Methods
-    public static function getRecommendationTypes(): array
+    public static function getAverageScoresByType(): array
+    {
+        return static::selectRaw('
+            analysis_type,
+            AVG(overall_score) as avg_overall,
+            AVG(ats_score) as avg_ats,
+            AVG(resume_match_score) as avg_resume,
+            AVG(interview_probability) as avg_interview,
+            COUNT(*) as count
+        ')
+        ->groupBy('analysis_type')
+        ->get()
+        ->keyBy('analysis_type')
+        ->toArray();
+    }
+
+    public static function getScoreDistribution(): array
     {
         return [
-            'excellent_match' => 'Excellent Match',
-            'good_match' => 'Good Match',
-            'fair_match' => 'Fair Match',
-            'poor_match' => 'Poor Match',
-            'not_recommended' => 'Not Recommended'
+            'excellent' => static::where('overall_score', '>=', 85)->count(),
+            'good' => static::whereBetween('overall_score', [70, 84])->count(),
+            'fair' => static::whereBetween('overall_score', [55, 69])->count(),
+            'poor' => static::where('overall_score', '<', 55)->count()
         ];
     }
 
-    public static function getAnalysisTypes(): array
+    public static function getTopPerformingJobs(int $limit = 10)
     {
-        return [
-            'basic' => 'Basic Analysis',
-            'ai_enhanced' => 'AI Enhanced',
-            'combined' => 'Combined Analysis'
-        ];
-    }
-
-    public function calculateMatchStrength(): array
-    {
-        $strengths = [];
-        $weaknesses = [];
-        
-        $scores = $this->section_scores;
-        
-        foreach ($scores as $section => $score) {
-            if ($score >= 75) {
-                $strengths[] = $section;
-            } elseif ($score < 50) {
-                $weaknesses[] = $section;
-            }
-        }
-
-        return [
-            'strengths' => $strengths,
-            'weaknesses' => $weaknesses,
-            'strength_count' => count($strengths),
-            'weakness_count' => count($weaknesses)
-        ];
+        return static::with('job')
+                    ->orderBy('overall_score', 'desc')
+                    ->take($limit)
+                    ->get();
     }
 }

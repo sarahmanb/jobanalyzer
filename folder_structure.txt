@@ -1,27 +1,27 @@
 job-analyzer/                           # Root directory in htdocs
 ├── app/                                # Application core
 │   ├── Controllers/                    # Request handlers
-│   │   ├── DashboardController.php
-│   │   ├── JobController.php
+│   │   ├── DashboardController.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Controllers/DashboardController.php
+│   │   ├── JobController.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Controllers/JobController.php
 │   │   ├── AnalysisController.php
 │   │   └── ReportController.php
 │   ├── Models/                         # Database models
-│   │   ├── Job.php
-│   │   ├── Analysis.php
-│   │   └── User.php
+│   │   ├── Job.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Models/Job.php
+│   │   ├── Analysis.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Models/JobAnalysis.php | https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Models/AnalysisLog.php
+│   │   └── User.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Models/User.php
 │   ├── Services/                       # Business logic
-│   │   ├── JobAnalyzerService.php
-│   │   ├── PDFParserService.php
-│   │   ├── AIAnalysisService.php
+│   │   ├── JobAnalyzerService.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Services/JobAnalyzerService.php
+│   │   ├── PDFParserService.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Services/PDFParserService.php
+│   │   ├── AIAnalysisService.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Services/AIAnalysisService.php
 │   │   └── ReportGeneratorService.php
 │   ├── Middleware/                     # Request middleware
 │   │   └── AuthMiddleware.php
 │   └── Validators/                     # Form validation
-│       ├── JobValidator.php
-│       └── FileValidator.php
+│       ├── JobValidator.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Validators/JobValidator.php
+│       └── FileValidator.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/app/Validators/FileValidator.php
 ├── config/                            # Configuration files
 │   ├── database.php
-│   ├── app.php
+│   ├── app.php 
 │   └── services.php
 ├── database/                          # Database related
 │   ├── migrations/                    # Database migrations
@@ -31,7 +31,7 @@ job-analyzer/                           # Root directory in htdocs
 │   └── seeds/                         # Sample data
 │       └── sample_jobs.sql
 ├── public/                            # Web accessible files
-│   ├── index.php                      # Entry point
+│   ├── index.php                      # Entry point https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/public/index.php
 │   ├── assets/                        # Static assets
 │   │   ├── css/
 │   │   │   ├── app.css
@@ -50,7 +50,7 @@ job-analyzer/                           # Root directory in htdocs
 │       │   ├── app.twig
 │       │   └── dashboard.twig
 │       ├── dashboard/
-│       │   └── index.twig
+│       │   └── index.twig https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/resources/views/dashboard/index.twig
 │       ├── jobs/
 │       │   ├── index.twig
 │       │   ├── create.twig
@@ -59,7 +59,7 @@ job-analyzer/                           # Root directory in htdocs
 │       └── reports/
 │           └── analysis.twig
 ├── routes/                            # Route definitions
-│   ├── web.php
+│   ├── web.php https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/routes/web.php
 │   └── api.php
 ├── storage/                           # Application storage
 │   ├── logs/
@@ -70,9 +70,12 @@ job-analyzer/                           # Root directory in htdocs
 │   ├── job_parser.py
 │   └── requirements.txt
 ├── vendor/                            # Composer dependencies
-├── .env                               # Environment variables
+├── .env                               # Environment variables https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/.env.sh
 ├── .env.example                       # Environment template
 ├── .gitignore                         # Git ignore rules
-├── composer.json                      # Composer configuration
+├── composer.json                      # Composer configuration to be created 
 ├── composer.lock                      # Composer lock file
 └── README.md                          # Project documentation
+
+db_schema.sql https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/database_schema.sql
+php libraries list https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/composer%20dependencies%20list.txt
