@@ -77,5 +77,6 @@ job-analyzer/                           # Root directory in htdocs
 ├── composer.lock                      # Composer lock file
 └── README.md                          # Project documentation
 
+composer.json https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/composer.json
 db_schema.sql https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/database_schema.sql
 php libraries list https://raw.githubusercontent.com/sarahmanb/jobanalyzer/refs/heads/main/composer%20dependencies%20list.txt
